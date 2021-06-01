@@ -1,0 +1,102 @@
+{% extends 'admin_panel_templates/admin_base.html' %}
+{% load static %}
+{% block content%}
+            <div class="card" method="POST" action="">	
+										<div class="card-body">
+											<form action="{% url 'category_offer' %}" method="POST">
+                      {% csrf_token %}
+                        <div class="form-row">
+                        <label for="inputPassword4">Select Your Product</label>
+                          <div class="input-group mb-3">
+                            <select class="custom-select" id="inputGroupSelect03" name="category">
+                              <option selected>Choose...</option>
+                              {% for category_item in category_items %}
+                              <option value="{{category_item}}">{{category_item}}</option>
+                              {% endfor %}
+                             
+                            </select>
+                          </div>
+                          <div class="col">
+                            <label for="inputPassword4">Enter Your Percentage</label>
+                            <input type="text" class="form-control" placeholder="Last name" name="percentage" Required>
+                          </div>
+                        </div>
+                        <br>
+                        <div class="form-row">
+                          <div class="col">
+                            <label for="inputPassword4">Valid From</label>
+                            <input type="date" class="form-control" placeholder="Last name" name="valid_from" Required>
+                          </div>
+                          <div class="col">
+                            <label for="inputPassword4">Valid To</label>
+                            <input type="date" class="form-control" placeholder="Last name" name="valid_to" Required>
+                          </div>
+                        </div>
+                        <br>
+                        <button type="" class="btn btn-primary">Primary</button>
+                      </form>
+										</div>
+									</div>
+          </div>
+        </div>
+
+
+
+        <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Coupons</h4>
+                  <p class="card-description">
+                    <code></code>
+                  </p>
+                  <div class="table-responsive">
+                    <table class="table table-striped" id="myTable">
+                      <thead>
+                        <tr>
+                          <th>
+                            Category
+                          </th>
+                          <th>
+                             Discount
+                          </th>
+                          <th>
+                            Valid from 
+                          </th>
+                          <th>
+                            Valid To
+                          </th>
+                          <th>
+                            Delete Offer
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for category_offer in category_offers %}
+                        <tr>
+                        
+                          <td class="py-1">
+                            {{category_offer.category}}
+                          </td>
+                          <td>
+                            {{category_offer.offer_price}}%
+                          </td>
+                          <td>
+                            {{category_offer.valid_from}}
+                          </td>
+                         <td>
+                            {{category_offer.valid_to}}
+                          </td>
+                         <td>
+                            <a href="{% url 'delete_category_offer' category_offer.id %}"><b>Delete</b></a>
+                          </td>
+                        </tr>
+                         {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+{% endblock %}

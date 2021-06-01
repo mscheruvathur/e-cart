@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Skydash Admin</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="{% static 'vendors/feather/feather.css' %}">
+  <link rel="stylesheet" href="{% static 'vendors/ti-icons/css/themify-icons.css' %}">
+  <link rel="stylesheet" href="{% static 'vendors/css/vendor.bundle.base.css' %}">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="{% static 'css/vertical-layout-light/style.css' %}">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="images/favicon.png" />
+  <link href="{% static '/css/cropper.min.css' %}" rel="stylesheet" type="text/css"/>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.min.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+  
+  
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src='https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js'></script>
+  
+  
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:../../partials/_navbar.html -->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <a class="navbar-brand brand-logo mr-5" href="{% url 'admin_panel' %}"><img src="{% static 'images/logo.png' %}" class="mr-2" alt="logo"/></a>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+          <span class="icon-menu"></span>
+        </button>
+        <ul class="navbar-nav mr-lg-2">
+          <li class="nav-item nav-search d-none d-lg-block">
+            <div class="input-group">
+              <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
+                <span class="input-group-text" id="search">
+                  <i class="icon-search"></i>
+                </span>
+              </div>
+              <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now" aria-label="search" aria-describedby="search">
+            </div>
+          </li>
+        </ul>
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item dropdown">
+            <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+              <i class="icon-bell mx-0"></i>
+              <span class="count"></span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+              <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+              <a class="dropdown-item preview-item">
+                <div class="preview-thumbnail">
+                  <div class="preview-icon bg-success">
+                    <i class="ti-info-alt mx-0"></i>
+                  </div>
+                </div>
+                <div class="preview-item-content">
+                  <h6 class="preview-subject font-weight-normal">Application Error</h6>
+                  <p class="font-weight-light small-text mb-0 text-muted">
+                    Just now
+                  </p>
+                </div>
+              </a>
+              <a class="dropdown-item preview-item">
+                <div class="preview-thumbnail">
+                  <div class="preview-icon bg-warning">
+                    <i class="ti-settings mx-0"></i>
+                  </div>
+                </div>
+                <div class="preview-item-content">
+                  <h6 class="preview-subject font-weight-normal">Settings</h6>
+                  <p class="font-weight-light small-text mb-0 text-muted">
+                    Private message
+                  </p>
+                </div>
+              </a>
+              <a class="dropdown-item preview-item">
+                <div class="preview-thumbnail">
+                  <div class="preview-icon bg-info">
+                    <i class="ti-user mx-0"></i>
+                  </div>
+                </div>
+                <div class="preview-item-content">
+                  <h6 class="preview-subject font-weight-normal">New user registration</h6>
+                  <p class="font-weight-light small-text mb-0 text-muted">
+                    2 days ago
+                  </p>
+                </div>
+              </a>
+            </div>
+          </li>
+          <li class="nav-item nav-profile dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+              <img src="{% static 'images/faces/face28.jpg' %}" alt="profile"/>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+              <a class="dropdown-item">
+                <i class="ti-settings text-primary"></i>
+                Settings
+              </a>
+              <a class="dropdown-item">
+                <i class="ti-power-off text-primary"></i>
+                Logout
+              </a>
+            </div>
+          </li>
+          <li class="nav-item nav-settings d-none d-lg-flex">
+            <a class="nav-link" href="#">
+              <i class="icon-ellipsis"></i>
+            </a>
+          </li>
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+          <span class="icon-menu"></span>
+        </button>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:../../partials/_settings-panel.html -->
+      <div class="theme-setting-wrapper">
+        <div id="settings-trigger"><i class="ti-settings"></i></div>
+        <div id="theme-settings" class="settings-panel">
+          <i class="settings-close ti-close"></i>
+          <p class="settings-heading">SIDEBAR SKINS</p>
+          <div class="sidebar-bg-options selected" id="sidebar-light-theme"><div class="img-ss rounded-circle bg-light border mr-3"></div>Light</div>
+          <div class="sidebar-bg-options" id="sidebar-dark-theme"><div class="img-ss rounded-circle bg-dark border mr-3"></div>Dark</div>
+          <p class="settings-heading mt-2">HEADER SKINS</p>
+          <div class="color-tiles mx-0 px-4">
+            <div class="tiles success"></div>
+            <div class="tiles warning"></div>
+            <div class="tiles danger"></div>
+            <div class="tiles info"></div>
+            <div class="tiles dark"></div>
+            <div class="tiles default"></div>
+          </div>
+        </div>
+      </div>
+      <div id="right-sidebar" class="settings-panel">
+        <i class="settings-close ti-close"></i>
+        <ul class="nav nav-tabs border-top" id="setting-panel" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="todo-tab" data-toggle="tab" href="#todo-section" role="tab" aria-controls="todo-section" aria-expanded="true">TO DO LIST</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="chats-tab" data-toggle="tab" href="#chats-section" role="tab" aria-controls="chats-section">CHATS</a>
+          </li>
+        </ul>
+        <div class="tab-content" id="setting-content">
+          <div class="tab-pane fade show active scroll-wrapper" id="todo-section" role="tabpanel" aria-labelledby="todo-section">
+            <div class="add-items d-flex px-3 mb-0">
+              <form class="form w-100">
+                <div class="form-group d-flex">
+                  <input type="text" class="form-control todo-list-input" placeholder="Add To-do">
+                  <button type="submit" class="add btn btn-primary todo-list-add-btn" id="add-task">Add</button>
+                </div>
+              </form>
+            </div>
+            <div class="list-wrapper px-3">
+              <ul class="d-flex flex-column-reverse todo-list">
+                <li>
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input class="checkbox" type="checkbox">
+                      Team review meeting at 3.00 PM
+                    </label>
+                  </div>
+                  <i class="remove ti-close"></i>
+                </li>
+                <li>
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input class="checkbox" type="checkbox">
+                      Prepare for presentation
+                    </label>
+                  </div>
+                  <i class="remove ti-close"></i>
+                </li>
+                <li>
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input class="checkbox" type="checkbox">
+                      Resolve all the low priority tickets due today
+                    </label>
+                  </div>
+                  <i class="remove ti-close"></i>
+                </li>
+                <li class="completed">
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input class="checkbox" type="checkbox" checked>
+                      Schedule meeting for next week
+                    </label>
+                  </div>
+                  <i class="remove ti-close"></i>
+                </li>
+                <li class="completed">
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input class="checkbox" type="checkbox" checked>
+                      Project review
+                    </label>
+                  </div>
+                  <i class="remove ti-close"></i>
+                </li>
+              </ul>
+            </div>
+            <h4 class="px-3 text-muted mt-5 font-weight-light mb-0">Events</h4>
+            <div class="events pt-4 px-3">
+              <div class="wrapper d-flex mb-2">
+                <i class="ti-control-record text-primary mr-2"></i>
+                <span>Feb 11 2018</span>
+              </div>
+              <p class="mb-0 font-weight-thin text-gray">Creating component page build a js</p>
+              <p class="text-gray mb-0">The total number of sessions</p>
+            </div>
+            <div class="events pt-4 px-3">
+              <div class="wrapper d-flex mb-2">
+                <i class="ti-control-record text-primary mr-2"></i>
+                <span>Feb 7 2018</span>
+              </div>
+              <p class="mb-0 font-weight-thin text-gray">Meeting with Alisa</p>
+              <p class="text-gray mb-0 ">Call Sarah Graves</p>
+            </div>
+          </div>
+          <!-- To do section tab ends -->
+          <div class="tab-pane fade" id="chats-section" role="tabpanel" aria-labelledby="chats-section">
+            <div class="d-flex align-items-center justify-content-between border-bottom">
+              <p class="settings-heading border-top-0 mb-3 pl-3 pt-0 border-bottom-0 pb-0">Friends</p>
+              <small class="settings-heading border-top-0 mb-3 pt-0 border-bottom-0 pb-0 pr-3 font-weight-normal">See All</small>
+            </div>
+            <ul class="chat-list">
+              <li class="list active">
+                <div class="profile"><img src="{% static 'images/faces/face1.jpg' %}" alt="image"><span class="online"></span></div>
+                <div class="info">
+                  <p>Thomas Douglas</p>
+                  <p>Available</p>
+                </div>
+                <small class="text-muted my-auto">19 min</small>
+              </li>
+              <li class="list">
+                <div class="profile"><img src="{% static 'images/faces/face2.jpg' %}" alt="image"><span class="offline"></span></div>
+                <div class="info">
+                  <div class="wrapper d-flex">
+                    <p>Catherine</p>
+                  </div>
+                  <p>Away</p>
+                </div>
+                <div class="badge badge-success badge-pill my-auto mx-2">4</div>
+                <small class="text-muted my-auto">23 min</small>
+              </li>
+              <li class="list">
+                <div class="profile"><img src="{% static 'images/faces/face3.jpg' %}" alt="image"><span class="online"></span></div>
+                <div class="info">
+                  <p>Daniel Russell</p>
+                  <p>Available</p>
+                </div>
+                <small class="text-muted my-auto">14 min</small>
+              </li>
+              <li class="list">
+                <div class="profile"><img src="{% static 'images/faces/face4.jpg' %}" alt="image"><span class="offline"></span></div>
+                <div class="info">
+                  <p>James Richardson</p>
+                  <p>Away</p>
+                </div>
+                <small class="text-muted my-auto">2 min</small>
+              </li>
+              <li class="list">
+                <div class="profile"><img src="{% static 'images/faces/face5.jpg" alt="image' %}"><span class="online"></span></div>
+                <div class="info">
+                  <p>Madeline Kennedy</p>
+                  <p>Available</p>
+                </div>
+                <small class="text-muted my-auto">5 min</small>
+              </li>
+              <li class="list">
+                <div class="profile"><img src="{% static 'images/faces/face6.jpg" alt="image' %}"><span class="online"></span></div>
+                <div class="info">
+                  <p>Sarah Graves</p>
+                  <p>Available</p>
+                </div>
+                <small class="text-muted my-auto">47 min</small>
+              </li>
+            </ul>
+          </div>
+          <!-- chat tab ends -->
+        </div>
+      </div>
+      <!-- partial -->
+      <!-- partial:../../partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_panel' %}">
+              <i class="icon-grid menu-icon"></i>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+              <i class="icon-layout menu-icon"></i>
+              <span class="menu-title">Products</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="{% url 'product_details' %}">Product Details</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{% url 'add_product' %}">Add Product</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{% url 'view_category' %}">View Category</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{% url 'add_category' %}">Add Category</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{% url 'variation' %}">View Variations</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{% url 'add_variation' %}">Add Variations</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'order_management' %}">
+              <i class="icon-grid menu-icon"></i>
+              <span class="menu-title">Order Management</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'user_details' %}">
+              <i class="icon-grid menu-icon"></i>
+              <span class="menu-title">User</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'sales_management' %}">
+              <i class="icon-grid menu-icon"></i>
+              <span class="menu-title">Sales Management</span>
+            </a>
+          </li>
+         
+         <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_logout' %}">
+              <i class="icon-grid menu-icon"></i>
+              <span class="menu-title">Logout</span>
+            </a>
+          </li>
+          
+          
+        </ul>
+      </nav>
+      {% comment %} <!-- partial -->
+      <div class="main-panel">          
+        <div class="content-wrapper">
+          <div class="row">
+ 
+            <div class="col-12 grid-margin">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Horizontal Two column</h4>
+                  <form class="form-sample" ction="#" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  {{form.errors}}{{form.non_field_errors}}
+                    <p class="card-description">
+                      Personal info
+                    </p>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Product Name</label>
+                          <div class="col-sm-9">
+                            {{form.product_name}}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Price</label>
+                          <div class="col-sm-9">
+                            {{form.price}}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Description</label>
+                          <div class="col-sm-9">
+                            {{form.description}}
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Category</label>
+                          <div class="col-sm-9">
+                            {{form.category}}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      
+                      
+                    </div>
+                    <p class="card-description">
+                      
+                    </p>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Stock</label>
+                          <div class="col-sm-9">
+                            {{form.stock}}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Image 1</label>
+                          <div class="col-sm-9">
+                            {{form.image}}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Image 2</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Image 3</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                      <button type= "submit">submit</button >
+                  </form>
+                </div>
+              </div>
+            </div> {% endcomment %}
+
+            <div class="card">
+										<link href="{% static '/css/cropper.min.css' %}" rel="stylesheet" type="text/css"/>
+										<div class="card-body">
+											<form method="post" action="{% url 'add_product' %}" enctype="multipart/form-data">
+											{% csrf_token %}
+												<div class="row">
+													<div class="mb-3 col-md-6">
+														<label class="form-label" for="inputFirstName">Name</label>
+														{{form.product_name}}
+													</div>
+													<div class="mb-3 col-md-6">
+														<label class="form-label" for="inputLastName">Price</label>
+														{{form.price}}
+													</div>
+												</div>
+												<div class="mb-3">
+													<label class="form-label" for="inputEmail4">Description</label>
+													{{form.description}}
+												</div>
+                        <div class="mb-3">
+													<label class="form-label" for="inputEmail4">Is Available</label>
+													{{form.is_available}}
+												</div>
+												<div class="row">
+													<div class="mb-3 col-md-6">
+														<label class="form-label" for="inputFirstName">Image 1</label>
+														{{form.images_1}}
+                            <img id="image1"  />
+                            <textarea name="pro_img1" id="pro_img1" style="display: none;"></textarea>
+                            <img src="" id="imageview1" style="height: auto;width: 100px;">
+													</div>
+                         
+                            
+                           
+													<div class="mb-3 col-md-6">
+														<label class="form-label" for="inputLastName">Image 2</label>
+														{{form.images_2}}
+                            <img id="image2" />
+                             <textarea name="pro_img2" id="pro_img2" style="display: none;"></textarea>
+                            <img src="" id="imageview2" style="height: auto;width: 100px;">
+													</div>
+                          
+												</div>
+                        <div class="row">
+													<div class="mb-3 col-md-6">
+														<label class="form-label" for="inputFirstName">Image 3</label>
+														{{form.images_3}}
+                          <img id="image3"  />
+                          <textarea name="pro_img3" id="pro_img3" style="display: none;"></textarea>
+                          <img src="" id="imageview3" style="height: auto;width: 100px;">
+
+													</div>
+													<div class="mb-3 col-md-6">
+														<label class="form-label" for="inputLastName">Image 4</label>
+														{{form.images_4}}
+                            <img id="image4"/>
+                            <textarea name="pro_img4" id="pro_img4" style="display: none;"></textarea>
+                            <img src="" id="imageview4" style="height: auto;width: 100px;">
+
+													</div>
+												</div>
+												<div class="row">
+													<div class="mb-3 col-md-6">
+														<label class="form-label" for="inputFirstName">Slug</label>
+														{{form.slug}}
+													</div>
+												
+												</div>
+												
+												<div class="row">
+													<div class="mb-3 col-md-6">
+														<label class="form-label" for="inputCity">Stok</label>
+														{{form.stock}}
+													</div>
+													<div class="mb-3 col-md-4">
+														<label class="form-label" for="inputState">Category</label>
+														{{form.category}}
+													</div>
+													<div class="mb-3 col-md-2">
+														<label class="form-label" for="inputZip">Size</label>
+														<input type="text" class="form-control" id="inputZip" name="size" value="">
+													</div>
+												</div>
+
+												<button type="submit" class="btn btn-primary">Save changes</button>
+        
+        
+        
+        
+
+      <!--modal 1-->
+        <div class="modal fade" id="exampleModalCenter1" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Crop Image</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="result1"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn " data-dismiss="modal">Close
+                            </button>
+                            <button type="button" id="btnCrop1" class="btn save1 btn-primary">Save changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--modal 1 end here-->
+        {#            modal#}
+        <div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Crop Image</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="box-2">
+                            <div style="max-width: 100%;" class="result2"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                        </button>
+                        <button type="button" id="btnCrop2" class="btn save2 btn-primary">Save changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {#            modal#}
+        {#            modal#}
+        <div class="modal fade" id="exampleModalCenter3" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Crop Image</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="box-2">
+                            <div style="width:10em;height: 100%" class="result3"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                        </button>
+                        <button type="button" id="btnCrop3" class="btn save3 btn-primary">Save changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# modal 4 #}
+        <div class="modal fade col-md-6" id="exampleModalCenter4" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+       <div class="modal-dialog modal-dialog-centered" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <h5 class="modal-title" id="exampleModalLongTitle">Crop Image</h5>
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                       <span aria-hidden="true">&times;</span>
+                   </button>
+               </div>
+               <div class="modal-body">
+                   <div class="box-2 ">
+                       <div style="width:10em;height: 100%" class="result4 "></div>
+                   </div>
+               </div>
+               <div class="modal-footer">
+                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                   </button>
+                   <button type="button" id="btnCrop4" class="btn save4 btn-primary">Save changes
+                   </button>
+               </div>
+           </div>
+       </div>
+											</form>
+                      
+
+										</div>
+									</div>
+
+
+
+
+
+
+          </div>
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:../../partials/_footer.html -->
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2021.  Premium <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap admin template</a> from BootstrapDash. All rights reserved.</span>
+            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="ti-heart text-danger ml-1"></i></span>
+          </div>
+        </footer>
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+
+  
+    <script>
+        let result1 = document.querySelector('.result1'),
+            save1 = document.querySelector('.save1'),
+            cropped1 = document.querySelector('.imageview1'),
+            upload1 = document.querySelector('#id_images_1'),
+            cropper1 = '';
+
+        upload1.addEventListener('change', (e) => {
+                var fileName = document.getElementById("id_images_1").value;
+                var idxDot = fileName.lastIndexOf(".") + 1;
+                var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+                if (extFile == "jpg" || extFile == "jpeg" || extFile == "png") {
+                    if (e.target.files.length) {
+                        // start file reader
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            if (e.target.result) {
+                                // create new image
+                                $("#exampleModalCenter1").modal("show");
+                                let img1 = document.createElement('img');
+                                img1.id = 'image1';
+                                img1.src = e.target.result
+                                // clean result before
+                                result1.innerHTML = '';
+                                // append new image
+                                result1.appendChild(img1);
+                                // init cropper
+                                cropper1 = new Cropper(img1, {
+                                    aspectRatio: 3 / 4,
+                                    viewMode: 2,
+                                });
+                            }
+                        };
+                        reader.readAsDataURL(e.target.files[0]);
+                    }
+                }
+                else {
+                    swal("this file type is not supported", {
+                        icon: "error",
+                    })
+                    fileName = "";
+                    console.log(fileName)
+                }
+            }
+        );
+
+        save1.addEventListener('click', (e) => {
+            e.preventDefault();
+            // get result to data uri
+            let imgSrc1 = cropper1.getCroppedCanvas({
+                width: 300,
+                height: 500// img disp value
+            }).toDataURL();
+            $("#exampleModalCenter1").modal("hide");
+            imageview1.src = imgSrc1;
+            $('#pro_img1').val(imgSrc1)
+        });
+    </script>
+    <script>
+      let result2 = document.querySelector('.result2'),
+          save2 = document.querySelector('.save2'),
+          cropped2 = document.querySelector('.imageview2'),
+          upload2 = document.querySelector('#id_images_2'),
+          cropper2 = '';
+
+      upload2.addEventListener('change', (e) => {
+              var fileName = document.getElementById("id_images_2").value;
+              var idxDot = fileName.lastIndexOf(".") + 1;
+              var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+              if (extFile == "jpg" || extFile == "jpeg" || extFile == "png") {
+                  if (e.target.files.length) {
+                      // start file reader
+                      const reader = new FileReader();
+                      reader.onload = (e) => {
+                          if (e.target.result) {
+                              // create new image
+                              $("#exampleModalCenter2").modal("show");
+                              let img2 = document.createElement('img');
+                              img2.id = 'image2';
+                              img2.src = e.target.result;
+                              // clean result before
+                              result2.innerHTML = '';
+                              // append new image
+                              result2.appendChild(img2);
+                              // init cropper
+                              cropper2 = new Cropper(img2, {
+                                  aspectRatio: 3 / 4,
+                                  viewMode: 2,
+                              });
+                          }
+                      };
+                      reader.readAsDataURL(e.target.files[0]);
+                  }
+              }
+              else {
+                  swal("this file type is not supported", {
+                      icon: "error",
+                  })
+                  fileName = "";
+                  console.log(fileName)
+              }
+          }
+      );
+
+      save2.addEventListener('click', (e) => {
+          e.preventDefault();
+          // get result to data uri
+          let imgSrc2 = cropper2.getCroppedCanvas({
+              width: 300,
+              height: 500// img disp value
+          }).toDataURL();
+          $("#exampleModalCenter2").modal("hide");
+          imageview2.src = imgSrc2;
+          $('#pro_img2').val(imgSrc2)
+      });
+  </script>
+  <script>
+    let result3 = document.querySelector('.result3'),
+        save3 = document.querySelector('.save3'),
+        cropped3 = document.querySelector('.imageview3'),
+        upload3 = document.querySelector('#id_images_3'),
+        cropper3 = '';
+
+    upload3.addEventListener('change', (e) => {
+        var fileName = document.getElementById("id_images_3").value;
+        var idxDot = fileName.lastIndexOf(".") + 1;
+        var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+        if (extFile == "jpg" || extFile == "jpeg" || extFile == "png") {
+            if (e.target.files.length) {
+                // start file reader
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    if (e.target.result) {
+                        // create new image
+                        $("#exampleModalCenter3").modal("show");
+                        let img3 = document.createElement('img');
+                        img3.id = 'image3';
+                        img3.src = e.target.result
+                        // clean result before
+                        result3.innerHTML = '';
+                        // append new image
+                        result3.appendChild(img3);
+                        // init cropper
+                        cropper3 = new Cropper(img3, {
+                            aspectRatio: 3 / 4,
+                            viewMode: 2,
+                        });
+                    }
+                };
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        } else {
+            swal("this file type is not supported", {
+                icon: "error",
+            })
+            fileName = "";
+            console.log(fileName)
+        }
+    });
+
+    save3.addEventListener('click', (e) => {
+        e.preventDefault();
+        // get result to data uri
+        let imgSrc3 = cropper3.getCroppedCanvas({
+            width: 300,
+            height: 500// img disp value
+        }).toDataURL();
+        $("#exampleModalCenter3").modal("hide");
+        imageview3.src = imgSrc3;
+        $('#pro_img3').val(imgSrc3)
+    });
+</script>
+
+<script>
+  let result4 = document.querySelector('.result4'),
+      save4 = document.querySelector('.save4'),
+      cropped4 = document.querySelector('.imageview4'),
+      upload4 = document.querySelector('#id_images_4'),
+      cropper4 = '';
+
+  upload4.addEventListener('change', (e) => {
+      var fileName = document.getElementById("id_images_4").value;
+      var idxDot = fileName.lastIndexOf(".") + 1;
+      var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+      if (extFile == "jpg" || extFile == "jpeg" || extFile == "png") {
+          if (e.target.files.length) {
+              // start file reader
+              const reader = new FileReader();
+              reader.onload = (e) => {
+                  if (e.target.result) {
+                      // create new image
+                      $("#exampleModalCenter4").modal("show");
+                      let img4 = document.createElement('img');
+                      img4.id = 'image4';
+                      img4.src = e.target.result
+                      // clean result before
+                      result4.innerHTML = '';
+                      // append new image
+                      result4.appendChild(img4);
+                      // init cropper
+                      cropper4 = new Cropper(img4, {
+                          aspectRatio: 3 / 4,
+                          viewMode: 2,
+                      });
+                  }
+              };
+              reader.readAsDataURL(e.target.files[0]);
+          }
+      } else {
+          swal("this file type is not supported", {
+              icon: "error",
+          })
+          fileName = "";
+          console.log(fileName)
+      }
+  });
+
+  save4.addEventListener('click', (e) => {
+      e.preventDefault();
+      // get result to data uri
+      let imgSrc4 = cropper4.getCroppedCanvas({
+          width: 300,
+          height: 500// img disp value
+      }).toDataURL();
+      $("#exampleModalCenter4").modal("hide");
+      imageview4.src = imgSrc4;
+      $('#pro_img4').val(imgSrc4)
+  });
+</script>
+  
+  <!-- container-scroller -->
+  <!-- plugins:js -->
+  <script src="{% static 'vendors/js/vendor.bundle.base.js' %}"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+  <!-- End plugin js for this page -->
+  <!-- inject:js -->
+ <!-- <script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          
+          reader.onload = function(e) {
+            $('#image1').attr('src', e.target.result);
+          }
+          
+          reader.readAsDataURL(input.files[0]); // convert to base64 string
+          
+        }
+      }
+      
+      $("#id_images_1").change(function() {
+        readURL(this);
+      });
+
+      function readURL4(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          
+          reader.onload = function(e) {
+            $('#image2').attr('src', e.target.result);
+          }
+          
+          reader.readAsDataURL(input.files[0]); // convert to base64 string
+        }
+      }
+      
+      $("#id_images_2").change(function() {
+        readURL4(this);
+      });
+
+      function readURL2(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          
+          reader.onload = function(e) {
+            $('#image3').attr('src', e.target.result);
+          }
+          
+          reader.readAsDataURL(input.files[0]); // convert to base64 string
+        }
+      }
+      
+      $("#id_images_3").change(function() {
+        readURL2(this);
+      });
+
+      function readURL3(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          
+          reader.onload = function(e) {
+            $('#image4').attr('src', e.target.result);
+            var $image = $('#image4');
+
+            
+          }
+          
+          reader.readAsDataURL(input.files[0]); // convert to base64 string
+        }
+      }
+      
+      $("#id_images_4").change(function() {
+        readURL3(this);
+      });
+</script>
+-->
+
+<script>
+    $("#id_category").change(function () {
+        const url = $("#productForm").attr("data-brand-url");  // get the url of the `load_cities` view
+        const categoryId = $(this).val();  // get the selected country ID from the HTML input
+        console.log(categoryId)
+
+        $.ajax({                       // initialize an AJAX request
+            url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
+            data: {
+                'category_id': categoryId      // add the country id to the GET parameters
+            },
+            
+            success: function (data) {   // `data` is the return of the `load_cities` view function
+                console.log(data)
+                $("#id_brand").html(data);  // replace the contents of the city input with the data that came from the server
+                /*
+
+                let html_data = '<option value="">---------</option>';
+                data.forEach(function (city) {
+                    html_data += `<option value="${city.id}">${city.name}</option>`
+                });
+                console.log(html_data);
+                $("#id_city").html(html_data);
+
+                */
+            }
+        });
+
+    });
+</script>
+ 
+  <script src="{% static 'js/off-canvas.js' %}"></script>
+  <script src="{% static 'js/hoverable-collapse.js' %}"></script>
+  <script src="{% static 'js/template.js' %}"></script>
+  <script src="{% static 'js/settings.js' %}"></script>
+  <script src="{% static 'js/todolist.js' %}"></script>
+  <!-- endinject -->
+</body>
+
+</html>

@@ -1,0 +1,309 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="section-content padding-y bg">
+<div class="container">
+
+<!-- ============================ COMPONENT 1 ================================= -->
+
+
+<div class="row">
+    <h4 class="text-center mb-10">Review  Your Order and Make Payment</h4>
+	<aside class="col-lg-8">
+
+<div class="card">
+  <h5 class="card-header">Billing Address</h5>
+  <div class="card-body">
+    <p class="card-text mb-0">{{ user_address.full_name }}</p>
+    <p class="card-text mb-0">{{ orduser_addresser.full_address }}</p>
+    <p class="card-text mb-0">{{ user_address.city }} , {{ user_address.state }}</p>
+    <p class="card-text mb-0">{{ user_address.country }}</p>
+    <p class="card-text mb-0">{{ user_address.email }}</p>
+    <p class="card-text mb-0">Phone Number : {{ user_address.phone }}</p>
+    {% if order.order_note %}
+        <b>Order Note :</b> {{ order.order_note }}
+    {% endif %}
+
+  </div>
+</div>
+<div class="card">
+  <h5 class="card-header">Choose Your Payment Method</h5>
+  <div class="card-body">
+  	
+	  <label>
+	  	<input type="radio" name="payment-option" value="cod">
+		  Cash On Delivery
+	  </label>
+	  <br>
+	  <label>
+	  	<input type="radio" name="payment-option" value="paypal">
+		  Paypal
+	  </label>
+	  <br>
+	   <label>
+	  	<input type="radio" name="payment-option" value="razorpay">
+		  Razorpay
+	  </label>
+    
+  </div>
+</div>
+<div class="card">
+  <h5 class="card-header">Review Products</h5>
+  <div class="card-body">
+    go
+￼
+
+    <table class="table table-borderless table-shopping-cart">
+<thead class="text-muted">
+<tr class="small text-uppercase">
+  <th scope="col">Product</th>
+  <th scope="col" width="120">Quantity</th>
+  <th scope="col" width="120">Price</th>
+  
+</tr>
+</thead>
+<tbody>
+
+{% for cart_item in cart_items %}
+<tr>
+	<td>
+		<figure class="itemside align-items-center">
+			<div class="aside"><img src="{{ cart_item.product.images_1.url }}" class="img-sm"></div>
+			<figcaption class="info">
+				<a href="{{ cart_item.product.get_url }}" class="title text-dark">{{ cart_item.product.product_name }}</a>
+				<p class="text-muted small">Size: 25 Mpx <br> Color: Canon</p>
+			</figcaption>
+		</figure>
+	</td>
+	<td> 
+		<label>{{cart_item.quantity}}</label>			
+	</td>
+	<td> 
+		<div class="price-wrap"> 
+		{% if cart_item.product.off_price is not None %}
+			<var class="price">$ {{cart_item.sub_offer}}</var> 
+		{% else %}
+			<var class="price">$ {{cart_item.sub_total}}</var> 
+		{% endif %}
+			<small class="text-muted"> $ {{ cart_item.product.price }}</small> 
+		</div> <!-- price-wrap .// -->
+	</td>
+	
+</tr>
+{% endfor %}
+
+
+</tbody>
+</table>
+
+  </div>
+</div>
+
+	</aside> <!-- col.// -->
+	<aside class="col-lg-4">
+
+		<div class="card">
+		
+		<div class="card-body">
+		
+		
+		
+			<dl class="dlist-align">
+			
+			  <dt>Total price:</dt>
+			  <dd class="text-right">${{total}}</dd>
+			</dl>
+			<dl class="dlist-align">
+			  <dt>Tax:</dt>
+			  <dd class="text-right"> ${{tax}}</dd>
+			</dl>
+			<dl class="dlist-align">
+			  <dt>Net Total:</dt>
+			  <dd class="text-right text-dark b"><strong>${{g_total}}</strong></dd>
+			</dl>
+			<hr>
+			
+		{% if coupon_code or ref_code %}
+			<dl class="dlist-align">
+			  <dt style="font-size:13px;">coupon:&nbsp;{{coupon_co}}</dt>
+			  <dd class="text-right text-dark b" style="font-size:14px;">${{coupon_disc}}</dd>
+			</dl>
+			<dl class="dlist-align">
+			  <dt style="font-size:20px;">After discount:</dt>
+			  <dd class="text-right text-dark b" style="font-size:20px;"><strong>${{offer_price}}</strong></dd>
+			</dl>
+		{% endif %}
+			<p class="text-center mb-3">
+				
+			</p>
+			<div id="cod-button-container">
+			<a href="{% url 'payments' %}" class="btn btn-primary btn-block">COD</a>
+			</div >
+			
+			<br>
+			
+			<div id="paypal-button-container" >
+			</div>
+
+			</div >
+				
+				<div id="rzp-button-container" class="text-center">
+					<form action="{% url 'razorpay_payment' %}" method="POST">
+					{% csrf_token %}
+					<script    src="https://checkout.razorpay.com/v1/checkout.js"    
+					data-key="rzp_test_geR1AvIEZJzphk" 
+					data-amount="{{ grand_total_2 }}"   
+					data-currency="INR"
+					data-order_id="{{payment.id}}"
+					data-buttontext="Pay with Razorpay"    
+					data-name="Great Cart"    
+					data-description="Confirm your amount"    
+					data-image="{% static 'images/logo.png' %}"    
+					data-prefill.name="sam cheruvathur"    
+					data-prefill.email="mscheruvathur@gmail.com"    
+					data-theme.color="#000080">
+					
+					</script>
+					<input type="hidden" custom="Hidden Element" name="hidden">
+					</form>
+				</div>
+		</div> <!-- card-body.// -->
+		</div> <!-- card.// -->
+
+</aside> <!-- col.// -->
+
+
+</div> <!-- row.// -->
+
+<!-- ============================ COMPONENT 1 END .// ================================= -->
+
+</div> <!-- container .//  -->
+</section>
+
+<script>
+
+	function getCookie(name) {
+		let cookieValue = null;
+		if (document.cookie && document.cookie !== '') {
+			const cookies = document.cookie.split(';');
+			for (let i = 0; i < cookies.length; i++) {
+				const cookie = cookies[i].trim();
+				// Does this cookie string begin with the name we want?
+				if (cookie.substring(0, name.length + 1) === (name + '=')) {
+					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+					break;
+				}
+			}
+		}
+		return cookieValue;
+	}
+	
+
+	var amount = "{{ grand_total }}"
+	var url = "{% url 'paypal_payment' %}"
+	var csrftoken = getCookie('csrftoken');
+	var orderID = "{{order.order_number}}"
+	var payment_method = 'Paypal'
+	// Render the PayPal button into #paypal-button-container
+	paypal.Buttons({
+		style: {
+			color:  'blue',
+			shape:  'pill',
+			label:  'pay',
+			height: 40
+		},
+
+		// Set up the transaction
+		createOrder: function(data, actions) {
+			return actions.order.create({
+				purchase_units: [{
+					amount: {
+						value: amount,
+					}
+				}]
+			});
+		},
+
+		// Finalize the transaction
+		onApprove: function(data, actions) {
+			return actions.order.capture().then(function(details) {
+				// Show a success message to the buyer
+				console.log(details);
+				sendData();
+				function sendData(){
+					fetch(url, {
+						method : "POST",
+						headers: {
+							"Content-type": "application/json",
+							"X-CSRFToken": csrftoken,
+						},
+						body: JSON.stringify({
+							orderID: orderID,
+							transID: details.id,
+							payment_method: payment_method,
+							status: details.status,
+						}),
+					})
+					//.then(response => response.json())
+					//.then(data => console.log(data));
+				}
+			});
+		}
+
+
+	}).render('#paypal-button-container');
+</script>
+
+<script>
+	// Hide cod and razorpay buttons by default
+	document.body.querySelector('#cod-button-container')
+		.style.display = 'none';
+	document.body.querySelector('#rzp-button-container')
+		.style.display = 'none';
+	document.body.querySelector('#paypal-button-container')
+		.style.display = 'none';
+		
+	// Listen for changes to the radio buttons
+	document.querySelectorAll('input[name=payment-option]')
+		.forEach(function (el) {
+		el.addEventListener('change', function (event) {
+	
+			// If PayPal is selected, show the PayPal button
+			if (event.target.value === 'paypal') {
+			codBtn = document.body.querySelector('#cod-button-container')
+			codBtn.style.display = 'none';
+			codBtn.click()
+			document.body.querySelector('#paypal-button-container')
+				.style.display = 'block';
+			document.body.querySelector('#rzp-button-container')
+				.style.display = 'none';
+			}
+	
+			// If Razorpay is selected
+			if (event.target.value === 'razorpay') {
+			document.body.querySelector('#rzp-button-container')
+			.style.display = 'block';
+			document.body.querySelector('#cod-button-container')
+				.style.display = 'none';
+			document.body.querySelector('#paypal-button-container')
+				.style.display = 'none';
+			}
+	
+			// If cod is selected
+			if (event.target.value === 'cod') {
+			document.body.querySelector('#cod-button-container')
+				.style.display = 'block';
+			document.body.querySelector('#paypal-button-container')
+				.style.display = 'none';
+			document.body.querySelector('#rzp-button-container')
+				.style.display = 'none';
+			}
+		});
+		});  
+	
+</script>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-conten padding-y bg">
+{% include 'includes/alerts.html' %}
+
+<div class="container">
+	<div class="row">
+	{% include 'includes/dashboard_sidbar.html' %}
+	<main class="col-md-9">
+		<article class="card">
+		<header class="card-header">
+			<strong class="d-inline-block mr-3">Your Order History</strong>
+			
+		</header>
+		<div class="card-body">
+			<div class="row"> 
+				
+				<div class="col-md-12">
+					<table class="table table-hover">
+  <thead>
+    <tr>
+	<th scope="col">image</th>
+      <th scope="col">Order #</th>
+      <th scope="col">Billing Name</th>
+      <th scope="col">Phone</th>
+      <th scope="col">Order Total</th>
+	  <th scope="col">Date</th>
+	  <th scope="col">Status</th>
+	  <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for order in orders  %}
+    <tr>
+		<th><img src="{{order.product.images_1.url}}" width="50px" ></th>
+      <th scope="row">{{ order.order.order_number }}</th>
+      <td>{{ order.order.full_name }}</td>
+      <td>{{ order.order.phone }}</td>
+      <td>$ {{ order.order.order_total }}</td>
+	  <td>{{ order.created_at }}</td>
+	  {% if order.status == 'Cancelled' %}
+	  <td>Cancelled</td>
+	  {% else %}
+		<td>{{ order.status }}</td>
+		{% if order.user_cancel == 'True' %}
+		<td	><p>Cancelled</p></td>
+		{% elif order.status == 'Cancelled' %}
+		<td><a href="{% url 'user_product_cancel' order.id %} " onclick="return confirm('Are you sure you want to Cancel this item?')">Cancel</a></td>
+		{% else %}
+			<td><a href="{% url 'user_product_cancel' order.id %} " onclick="return confirm('Are you sure you want to Cancel this item?')">Return</a></td>
+		{% endif %}
+	  {% endif %}
+	  
+    </tr>
+{% endfor %}
+ 
+  </tbody>
+</table>
+				</div>
+			</div> <!-- row.// -->
+		</div> <!-- card-body .// -->
+		
+		</article> <!-- order-group.// --> 
+	</main>
+</div> <!-- row.// -->
+</div>
+
+
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+
+
+{% endblock %}

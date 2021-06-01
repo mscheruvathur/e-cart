@@ -1,0 +1,189 @@
+{% extends 'admin_panel_templates/admin_base.html' %}
+{% load static %}
+{% block content%}
+
+
+             <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Order Table</h4>
+                  
+
+                <div class="form-group">
+                  <select name="state" id="maxRows" class="form-control" style="width:150px;">
+                    <option value="5000">Show All</option>
+                    <option value="5000">5</option>
+                    <option value="5000">10</option>
+                    <option value="5000">15</option>
+                    <option value="5000">20</option>
+                    <option value="5000">50</option>
+                    <option value="5000">75</option>
+                    <option value="5000">100</option>
+                  </select>
+                </div>
+
+
+
+
+                  
+                  <div class="table-responsive" >
+                    <table class="table table-striped" id="myTable">
+                      <thead>
+                        <tr>
+                          <th>
+                            Order Id
+                          </th>
+                          <th>
+                            Customer Name
+                          </th>
+                          <th>
+                            Email
+                          </th>
+                          <th>
+                            Tax
+                          </th>
+                          <th>
+                            Grand Total
+                          </th>
+                          <th>
+                            Orderd Date
+                          </th>
+                          <th>
+                            Status  
+                          </th>
+                          <th>
+                            Update  
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody id="box">
+                      {% for order_product in order_products %}
+                        <tr>
+                        
+                          <td class="py-1">
+                            # <b>{{order_product.payment}}<b>
+                          </td>
+                          <td>
+                            {{order_product.user.first_name}} {{order_product.user.last_name}}
+                          </td>
+                          
+                          <td>
+                            {{order_product.user.email}}
+                          </td><td>
+                            $ <b>{{order_product.order.tax}}<b>
+                          </td>
+
+                          <td>
+                            $ <b>{{order_product.order.order_total}}<b>
+                          </td>
+                          
+                          <td>
+                            {{order_product.order.created_at}}
+                          </td>
+                          <form method="POST" action="{% url 'cancel_order' order_product.id %}">
+                          {% csrf_token %}
+                          
+                          {% if order_product.user_cancel == 'True' %}
+                          <td><p>User Cncelled</p></td>
+                          {% else %}
+                          <td>
+                            <select name="status" >
+                              <option value="{{ order_product.status }}">{{ order_product.status }}</option>
+                              <option value="Pending" >Orderd</option>
+                              <option value="Pending" >Pending</option>
+                              <option value="Delivered">Delivered</option>
+                              <option value="Cancelled">Cancelled</option>
+                            </select>
+                          </td>
+                          
+                          <td>
+                            <button type="submit">Update</button>
+                          </td>
+                          {% endif %}
+                          </form>
+                         
+                        </tr>
+                         {% endfor %}
+                      </tbody>
+                    </table>
+
+
+                    <div class="pagination-container">
+                      <nav>
+                        <ul class="pagination">
+
+                        </ul>
+                      </nav>
+                    </div>
+
+
+                  <div class="pagenumbers" id="pagination"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+      <script>
+        const list_element = document.getElementById('box');
+const pagination_element = document.getElementById('pagination');
+
+let current_page = 1;
+let rows = 5;
+
+function DisplayList (items, wrapper, rows_per_page, page) {
+	wrapper.innerHTML = "";
+	page--;
+
+	let start = rows_per_page * page;
+	let end = start + rows_per_page;
+	let paginatedItems = items.slice(start, end);
+
+	for (let i = 0; i < paginatedItems.length; i++) {
+		let item = paginatedItems[i];
+
+		let item_element = document.createElement('div');
+		item_element.classList.add('item');
+		item_element.innerText = item;
+		
+		wrapper.appendChild(item_element);
+	}
+}
+
+function SetupPagination (items, wrapper, rows_per_page) {
+	wrapper.innerHTML = "";
+
+	let page_count = Math.ceil(items.length / rows_per_page);
+	for (let i = 1; i < page_count + 1; i++) {
+		let btn = PaginationButton(i, items);
+		wrapper.appendChild(btn);
+	}
+}
+
+function PaginationButton (page, items) {
+	let button = document.createElement('button');
+	button.innerText = page;
+
+	if (current_page == page) button.classList.add('active');
+
+	button.addEventListener('click', function () {
+		current_page = page;
+		DisplayList(items, list_element, rows, current_page);
+
+		let current_btn = document.querySelector('.pagenumbers button.active');
+		current_btn.classList.remove('active');
+
+		button.classList.add('active');
+	});
+
+	return button;
+}
+
+DisplayList(list_items, list_element, rows, current_page);
+SetupPagination(list_items, pagination_element, rows);
+      </script>
+ 
+   {% endblock %}

@@ -1,0 +1,94 @@
+
+{% extends 'admin_panel_templates/admin_base.html' %}
+{% load static %}
+{% block content%}
+
+
+            <div class="card" method="POST" action="">
+										
+										<div class="card-body">
+											<form action="{% url 'coupon_discount' %}" method="POST">
+                      {% csrf_token %}
+                        <div class="form-row">
+                          <div class="col">
+                            <label for="inputPassword4">Enter Your Discount</label>
+                            <input type="text" class="form-control" placeholder="Enter your discount" name="discount" Required>
+                          </div>
+                        </div>
+                        <br>
+                        <div class="form-row">
+                          <div class="col">
+                            <label for="inputPassword4">Valid From</label>
+                            <input type="date" class="form-control" placeholder="Last name" name="valid_from" Required>
+                          </div>
+                          <div class="col">
+                            <label for="inputPassword4">Valid To</label>
+                            <input type="date" class="form-control" placeholder="Last name" name="valid_to" Required>
+                          </div>
+                        </div>
+                        <br>
+                        <button type="" class="btn btn-primary">Generate Coupon</button>
+                      </form>
+                      <br>
+										</div>
+									</div>
+          </div>
+        </div>
+          <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Coupons</h4>
+                  <p class="card-description">
+                    <code></code>
+                  </p>
+                  <div class="table-responsive">
+                    <table class="table table-striped" id="myTable">
+                      <thead>
+                        <tr>
+                          <th>
+                            Coupon Code
+                          </th>
+                          <th>
+                             Discount
+                          </th>
+                          <th>
+                            Valid from 
+                          </th>
+                          <th>
+                            Valid To
+                          </th>
+                          <th>
+                            Delete Coupon
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for coupon in coupons %}
+                        <tr>
+                        
+                          <td class="py-1">
+                            {{coupon.coupon_code}}
+                          </td>
+                          <td>
+                            {{coupon.coupon_price}}%
+                          </td>
+                          <td>
+                            {{coupon.valid_from}}
+                          </td>
+                         <td>
+                            {{coupon.valid_to}}
+                          </td>
+                         <td>
+                            <a href="{% url 'delete_coupon' coupon.id %}"><b>Delete</b></a>
+                          </td>
+                        </tr>
+                         {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+{% endblock %}

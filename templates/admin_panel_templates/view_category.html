@@ -1,0 +1,53 @@
+{% extends 'admin_panel_templates/admin_base.html' %}
+{% load static %}
+{% block content%}
+
+           <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Category</h4>
+                  <p class="card-description">
+                    <code></code>
+                  </p>
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>
+                            Category Name
+                          </th>
+                          <th>
+                             Slug
+                          </th>
+                          <th>
+                            Description
+                          </th>
+                          
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for categories in category %}
+                        <tr>
+                        
+                          <td class="py-1">
+                            {{categories.category_name}}
+                          </td>
+                          <td>
+                            {{categories.slug}}
+                          </td>
+                          <td>
+                            {{categories.description}}
+                          </td>
+                         
+                         
+                        </tr>
+                         {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+{% endblock %}

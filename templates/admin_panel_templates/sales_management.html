@@ -1,0 +1,171 @@
+{% extends 'admin_panel_templates/admin_base.html' %}
+{% load static %}
+{% block content%}
+
+          <div class="row">
+          
+              <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                
+                  <!-- As a link -->
+                  <nav class="navbar navbar-light bg-light">
+                    <div class="container-fluid">
+                    
+                      
+                <form class="form-inline" method="GET" action="{% url 'sales_management' %}">
+                {% csrf_token %}
+                  <div class="form-group">
+                    <div class="form-group row">
+                    <label for="example-date-input" class="col-2 col-form-label">From</label>
+                    <div class="col-10">
+                      <input class="form-control" type="date" value="" id="example-date-input" name="from_date" Required>
+                    </div>
+                  </div>
+                  </div>
+                  <div class="form-group mx-sm-3">
+                    <div class="form-group row">
+                    <label for="example-date-input" class="col-2 col-form-label">To</label>
+                    <div class="col-10">
+                      <input class="form-control" type="date" value="" id="example-date-input" name="to_date" Required>
+                    </div>
+                  </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Confirm</button>
+                </form>
+
+
+
+                      <form class="form-inline" method="GET" action="{% url 'monthly_report' %}">
+                {% csrf_token %}
+                
+                <div class="form-group mx-sm-3 mb-2">
+                  <label for="inputPassword2" class="sr-only">Monthly</label>
+                  <input type="month" class="form-control" id="inputPassword2" placeholder="Monthly" name="month" Required>
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">Confirm</button>
+              </form>
+
+
+
+
+              
+                    </div>
+                  </nav>
+
+                </div>
+                </div>
+                </div>
+
+
+          
+
+
+                <div class="col-lg-4 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+
+                <form class="form-inline" method="GET" action="{% url 'yearly_report' %}">
+                {% csrf_token %}
+                
+                <div class="form-group mx-sm-3 mb-2">
+                  <label for="inputPassword2" class="sr-only">Yearly</label>
+                  <input type="text" class="form-control" id="inputPassword2" placeholder="Year" name="year" Required>
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">Confirm</button>
+              </form>
+                </div>
+                
+                </div>
+                
+                </div>
+                
+            <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Order Table</h4>
+                  <a href="{% url 'export_pdf' %}" class="btn btn-info">Export PDF</a>
+                  
+                
+                
+
+
+                  <div class="table-responsive">
+                    <table class="table table-striped" id="myTable">
+                      <thead>
+                        <tr>
+                          <th>
+                            Order Id
+                          </th>
+                          <th>
+                            Customer Name
+                          </th>
+                          <th>
+                            Email
+                          </th>
+                          <th>
+                            Tax
+                          </th>
+                          <th>
+                            Grand Total
+                          </th>
+                          <th>
+                            Orderd Date
+                          </th>
+                          <th>
+                            Status  
+                          </th>
+                         
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for order_product in order_products %}
+                        <tr>
+                        
+                          <td class="py-1">
+                            # <b>{{order_product.payment}}<b>
+                          </td>
+                          <td>
+                            {{order_product.user.first_name}} {{order_product.user.last_name}}
+                          </td>
+                          
+                          <td>
+                            {{order_product.user.email}}
+                          </td><td>
+                            $ <b>{{order_product.order.tax}}<b>
+                          </td>
+
+                          <td>
+                            $ <b>{{order_product.order.order_total}}<b>
+                          </td>
+                          
+                          <td>
+                            {{order_product.order.created_at}}
+                          </td>
+                          <td>Item Delivered</td>
+                        </tr>
+                         {% endfor %}
+                      </tbody>
+                    </table>
+                    {% if order_products.has_previous %}
+                    <a href="{% url 'sales_management' %}?page={{order_products.previous_page_number}}" class="btn btn-primary">Previous Page</a>
+                    {% endif %}
+                    {% if order_products.has_next %}
+                    <a href="{% url 'sales_management' %}?page={{order_products.next_page_number}}" class="btn btn-primary">Next Page</a>
+                    {% endif %}
+                    <br>
+                    <div class="text-right">
+                      <h5 class="">Total Amount</h5>
+                      <h4 class="">{{ total }}</h4>
+                      <h1></h1>
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        
+
+{% endblock %}

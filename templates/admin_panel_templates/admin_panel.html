@@ -1,0 +1,486 @@
+{% extends 'admin_panel_templates/admin_base.html' %}
+{% load static %}
+{% block content%}
+
+
+
+
+
+
+
+
+
+
+<!--Section: Block Content-->
+<section>
+
+  <!--Grid row-->
+  <div class="row">
+
+    <!--Grid column-->
+    <div class="col-lg-4 col-md-12 mb-4">
+
+      <!-- Card -->
+      <div class="card">
+
+        <div class="card-body">
+
+          <p class="text-uppercase small mb-2"><strong>Total sales</strong></p>
+          <h5 class="font-weight-bold mb-0">
+            $ {{total_sales}}
+            <small class="text-success ml-2">
+              <i class="fas fa-arrow-up fa-sm pr-1"></i></small>
+          </h5>
+
+          <hr>
+
+          <p class="text-uppercase text-muted small mb-2"><strong>Cash on delivery</strong></p>
+          <h5 class="font-weight-bold text-muted mb-0">
+            $ {{cod_amount}}
+          </h5>
+
+        </div>
+
+      </div>
+      <!-- Card -->
+
+    </div>
+    <!--Grid column-->
+
+    <!--Grid column-->
+    <div class="col-lg-4 col-md-6 mb-4">
+
+      <!-- Card -->
+      <div class="card">
+
+        <div class="card-body">
+
+          <p class="text-uppercase small mb-2"><strong>Orders</strong></p>
+          <h5 class="font-weight-bold mb-0">
+            {{tptal_product}}
+            <small class="text-success ml-2">
+              <i class="fas fa-arrow-up fa-sm pr-1"></i></small>
+          </h5>
+
+          <hr>
+
+          <p class="text-uppercase text-muted small mb-2"><strong>Cancelled orders</strong></p>
+          <h5 class="font-weight-bold text-muted mb-0">
+            {{cancel}}
+          </h5>
+
+        </div>
+
+      </div>
+      <!-- Card -->
+
+    </div>
+    <!--Grid column-->
+
+    <!--Grid column-->
+    <div class="col-lg-4 col-md-6 mb-4">
+
+      <!-- Card -->
+      <div class="card">
+
+        <div class="card-body">
+
+          <p class="text-uppercase small mb-2"><strong>Total User</strong></p>
+          <h5 class="font-weight-bold mb-0">
+            {{total_user}}
+            <small class="text-danger ml-2">
+              <i class="fas fa-arrow-down fa-sm pr-1"></i></small>
+          </h5>
+
+          <hr>
+
+          <p class="text-uppercase text-muted small mb-2"><strong>Blocked User</strong></p>
+          <h5 class="font-weight-bold text-muted mb-0">
+            0
+          </h5>
+
+        </div>
+
+      </div>
+      <!-- Card -->
+
+    </div>
+    <!--Grid column-->
+
+  </div>
+  <!--Grid row-->
+
+</section>
+<!--Section: Block Content-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+          
+          <div class="row">
+            <div class="col-md-6 grid-margin">
+              <div class="card">
+                <div class="card-body">
+                <h4 class="card-title">Order Status</h4>
+
+
+                    <canvas id="barChartHorizontal"></canvas>
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+                      <script>
+                     // Bar chart horizontal
+                          var ctxL = document.getElementById("barChartHorizontal").getContext('2d');
+                          var myLineChart = new Chart(ctxL, {
+                            type: 'horizontalBar',
+                            data: {
+                              labels: ["New Order","Sales","Pending","Accepted","Cancelled","Delivered","User Cancelleed"],
+                              datasets: [
+                                {
+                                  label: "Order Status",
+                                  data: [{{new_order}},{{sales}},{{pend}},{{accept}},{{cancel}},{{delivered}},{{user_cancelled}}],
+                                  backgroundColor: '#4285F4',
+                                  borderWidth: 0,
+                                }
+                              ]
+                            },
+                            options: {
+                              responsive: true,
+                              legend: {
+                                display: true,
+                              },
+                              tooltips: {
+                                intersect: false,
+                                mode: 'index'
+                              },
+                              scales: {
+                                xAxes: [{
+                                  stacked: true,
+                                  gridLines: {
+                                    display: true,
+                                  },
+
+                                  ticks: {
+                                    fontColor: 'rgba(0,0,0, 0.5)',
+                                  }
+                                }],
+                                yAxes: [{
+                                  stacked: true,
+                                  gridLines: {
+                                    display: false,
+                                    borderDash: [2],
+                                    drawBorder: false,
+                                    zeroLineColor: "rgba(0,0,0,0)",
+                                    zeroLineBorderDash: [2],
+                                    zeroLineBorderDashOffset: [2]
+                                  },
+                                  ticks: {
+                                    fontColor: 'rgba(0,0,0, 0.5)'
+                                  }
+                                }]
+                              }
+                            }
+                          });
+                      </script>
+
+
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                <h4 class="card-title">Dialy Sale</h4>
+                 
+
+
+
+                  <canvas id="lineChart"></canvas>
+                        <script>
+                        // Line chart
+                            var ctxL = document.getElementById("lineChart").getContext('2d');
+                            var myLineChart = new Chart(ctxL, {
+                                type: 'line',
+                                data: {
+                                    labels: ["Day-1","Day-2","Day-3","Day-4","Day-5","Day-6","Day-7"],
+                                    datasets: [
+                                        {
+                                            label: "Daily Sales",
+                                            data: [{{day2}},{{day1}},{{day3}},{{day4}},{{day5}},{{day6}},{{day7}}],
+                                            backgroundColor: 'rgba(66, 133, 244, 0.0)',
+                                            borderColor: '#32CD32',
+                                            borderWidth: 2,
+                                            pointBorderColor: '#32CD32',
+                                            pointBackgroundColor: '#32CD32',
+                                            lineTension: 0.00,
+                                        }
+                                    ]
+                                },
+                                options: {
+                                    responsive: true,
+                                    legend: {
+                                        display: true,
+                                    },
+                                    tooltips: {
+                                        intersect: false,
+                                        mode: 'index'
+                                    },
+                                    scales: {
+                                        xAxes: [{
+                                            stacked: true,
+                                            gridLines: {
+                                                display: false,
+                                            },
+
+                                            ticks: {
+                                                fontColor: 'rgba(0,0,0, 0.5)',
+                                            }
+                                        }],
+                                        yAxes: [{
+                                            stacked: true,
+                                            gridLines: {
+                                                borderDash: [2],
+                                                drawBorder: false,
+                                                zeroLineColor: "rgba(0,0,0,0)",
+                                                zeroLineBorderDash: [2],
+                                                zeroLineBorderDashOffset: [2]
+                                            },
+                                            ticks: {
+                                                fontColor: 'rgba(0,0,0, 0.5)'
+                                            }
+                                        }]
+                                    }
+                                }
+                            });
+                        </script>
+
+
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+<!--Section: Block Content-->
+<section>
+
+  <!--Grid row-->
+  <div class="row">
+
+    <!--Grid column-->
+    <div class="col-lg-4 col-md-12 mb-4">
+
+      <!-- Card -->
+      <div class="card">
+
+        <div class="card-body">
+
+          <p class="text-uppercase small mb-2"><strong>COD</strong></p>
+          <h5 class="font-weight-bold mb-0">
+            $ {{cod_amount}}
+            <small class="text-success ml-2">
+              <i class="fas fa-arrow-up fa-sm pr-1"></i></small>
+          </h5>
+
+        </div>
+
+      </div>
+      <!-- Card -->
+
+    </div>
+    <!--Grid column-->
+
+    <!--Grid column-->
+    <div class="col-lg-4 col-md-6 mb-4">
+
+      <!-- Card -->
+      <div class="card">
+
+        <div class="card-body">
+
+          <p class="text-uppercase small mb-2"><strong>PayPal</strong></p>
+          <h5 class="font-weight-bold mb-0">
+            ${{paypal_amount}}
+            <small class="text-success ml-2">
+              <i class="fas fa-arrow-up fa-sm pr-1"></i></small>
+          </h5>
+
+
+        </div>
+
+      </div>
+      <!-- Card -->
+
+    </div>
+    <!--Grid column-->
+
+    <!--Grid column-->
+    <div class="col-lg-4 col-md-6 mb-4">
+
+      <!-- Card -->
+      <div class="card">
+
+        <div class="card-body">
+
+          <p class="text-uppercase small mb-2"><strong>Razorpay</strong></p>
+          <h5 class="font-weight-bold mb-0">
+            ${{razor_amount}}
+            <small class="text-danger ml-2">
+              <i class="fas fa-arrow-down fa-sm pr-1"></i></small>
+          </h5>
+          
+
+        </div>
+
+      </div>
+      <!-- Card -->
+
+    </div>
+    <!--Grid column-->
+
+  </div>
+  <!--Grid row-->
+
+</section>
+
+          
+
+
+
+          <div class="row">
+            <div class="col-md-6 grid-margin ">
+              <div class="card">
+                <div class="card-body">
+                <h4 class="card-title">Product Status</h4>
+
+
+                    <canvas id="barChart"></canvas>
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+                      <script>
+                      // Bar chart
+                          var ctxL = document.getElementById("barChart").getContext('2d');
+                          var myLineChart = new Chart(ctxL, {
+                            type: 'bar',
+                            data: {
+                              labels: ["Shirt", "T-shirt", "Jeans", "Shoes"],
+                              datasets: [
+                                {
+                                  label: "Product Status",
+                                  data: [{{shirt}}, {{t_shirt}}, {{pant}}, {{shoes}}],
+                                  backgroundColor: '#4285F4',
+                                  borderWidth: 0,
+                                }
+                              ]
+                            },
+                            options: {
+                              responsive: true,
+                              legend: {
+                                display: true,
+                              },
+                              tooltips: {
+                                intersect: false,
+                                mode: 'index'
+                              },
+                              scales: {
+                                xAxes: [{
+                                  stacked: true,
+                                  gridLines: {
+                                    display: false,
+                                  },
+
+                                  ticks: {
+                                    fontColor: 'rgba(0,0,0, 0.5)',
+                                  }
+                                }],
+                                yAxes: [{
+                                  stacked: true,
+                                  gridLines: {
+                                    borderDash: [2],
+                                    drawBorder: false,
+                                    zeroLineColor: "rgba(0,0,0,0)",
+                                    zeroLineBorderDash: [2],
+                                    zeroLineBorderDashOffset: [2]
+                                  },
+                                  ticks: {
+                                    fontColor: 'rgba(0,0,0, 0.5)'
+                                  }
+                                }]
+                              }
+                            }
+                          });
+                      </script>
+
+
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                <h4 class="card-title">Pyment</h4>
+                 
+
+
+
+                  <canvas id="polarChart"></canvas>
+                        <script>
+                       // Polar chart
+                          var ctxL = document.getElementById("polarChart").getContext('2d');
+                          var myLineChart = new Chart(ctxL, {
+                            type: 'polarArea',
+                            data: {
+                              labels: ["COD","PayPal","Razorpay"],
+                              datasets: [
+                                {
+                                  label: "Traffic",
+                                  data: [{{cod_amount}},{{paypal_amount}},{{razor_amount}}],
+                                  backgroundColor: [
+                                    "rgba(63, 81, 181, 0.5)", "rgba(77, 182, 172, 0.5)", "rgba(66, 133, 244, 0.5)", "rgba(156, 39, 176, 0.5)", "rgba(233, 30, 99, 0.5)"
+                                  ],
+                                }
+                              ]
+                            },
+                            options: {
+                              responsive: true,
+                              legend: {
+                                display: true,
+                              }
+                            }
+                          });
+                        </script>
+
+
+
+
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                <h4 class="card-title"></h4>
+                
+
+
+
+{% endblock %}
+            
+
+    

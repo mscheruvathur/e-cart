@@ -1,0 +1,67 @@
+{% extends 'admin_panel_templates/admin_base.html' %}
+{% load static %}
+{% block content%}
+
+
+
+              <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Variation Table</h4>
+                  <p class="card-description">
+                     <code>.</code>
+                  </p>
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>
+                            Product Name
+                          </th>
+                          <th>
+                            Category
+                          </th>
+                          <th>
+                            Value
+                          </th>
+                          <th>
+                            Date
+                          </th><th>
+                            Delete
+                          </th>
+
+                        </tr>   
+                      </thead>
+                      <tbody>
+                      {% for variations in variation %}
+                        <tr>
+                        
+                          <td class="py-1">
+                            {{variations.product}}
+                          </td>
+                          <td>
+                            {{variations.variation_category}}
+                          </td>
+                          <td>
+                            {{variations.variation_value}}
+                          </td>
+                          <td>
+                            {{variations.created_date}}
+                          </td>
+                          <td>
+                            <button style="background: rgba(0,0,0,0); border:none; color:blue;" onclick="return confirm ('Do you want to Block the {{users.username}}') ? window.location.href='{% url 'delete_variation' variations.id %}' : '' ">Delete</button>
+                          </td>
+                          
+                         
+                        </tr>
+                         {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+{% endblock %}

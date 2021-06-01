@@ -1,0 +1,64 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content%}
+
+
+
+<!-- ========================= SECTION MAIN ========================= -->
+<section class="section-intro padding-y-sm">
+<div class="container">
+
+<div class="intro-banner-wrap">
+	<img src="{% static 'images/banners/cover.jpg' %}" class="img-fluid rounded">
+</div>
+
+</div> <!-- container //  -->
+</section>
+<!-- ========================= SECTION MAIN END// ========================= -->
+
+<!-- ========================= SECTION  ========================= -->
+<section class="section-name padding-y-sm">
+<div class="container">
+
+<header class="section-heading">
+	<a href="{% url 'store' %}" class="btn btn-outline-primary float-right">See all</a>
+	<h3 class="section-title">Popular products</h3>
+</header><!-- sect-heading -->
+
+	
+<div class="row">
+{% for product in products %}
+
+
+	<div class="col-md-3">
+		<div class="card card-product-grid">
+			<a href="{{ product.get_url }}" class="img-wrap"> <img src="{{product.images_1.url}}"> </a>
+			<figcaption class="info-wrap">
+				<a href="{{ product.get_url }}" class="title">{{product.product_name}}</a>
+				{% if product.off_price > 0 %}
+				<div class="price mt-1"><s>Original price : ${{product.price}}</s></div> <!-- price-wrap.// -->
+				<div class="price mt-1" style="font-size:12px; color:green;">view for more details</div> <!-- price-wrap.// -->
+				
+				{% else %}
+				<div class="price mt-1">${{product.price}}</div> <!-- price-wrap.// -->
+				{% endif %}
+			</figcaption>
+			{% if single_product.stock <= 0 %}
+		<h5 class="text-danger">Out of Stock</h5>
+		{% else %}
+			<a href="{% url 'add_cart' product.id %}"><button type="submit" href="" class="btn  btn-primary"> <span class="text">Add to Cart</span> <i class="fas fa-shopping-cart"></i>  </button></a>
+		{% endif %}
+		</div>
+	</div> <!-- col.// -->
+
+{% endfor %}
+</div> <!-- row.// -->
+
+</div><!-- container // -->
+</section>
+<!-- ========================= SECTION  END// ========================= -->
+
+</body>
+</html>
+{% endblock %}
