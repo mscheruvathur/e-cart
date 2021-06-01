@@ -818,9 +818,16 @@ def delete_user(request,pk):
 # displaying orders
 
 def order_management(request):
-    
+
     order_product = OrderProduct.objects.all()
-    context = {'order_products' : order_product}
+    p = Paginator(order_product,10)
+    page_num = request.GET.get('page',1)
+
+    try:
+        page = p.page(page_num)
+    except EmptyPage:
+        page = p.page(1)
+    context = {'order_products' : page}
     
     return render(request,'admin_panel_templates/order_management.html',context)
 
@@ -836,10 +843,6 @@ def sales_management(request, page = 0):
     order_product = OrderProduct.objects.filter(status = 'Delivered')
 
     total = 0
-    for i in order_product:
-        total += i.product_price +i.order.tax
-
-    tot = int(total)
 
     p = Paginator(order_product, 10)
     page_num = request.GET.get('page',1)
@@ -848,6 +851,12 @@ def sales_management(request, page = 0):
         page = p.page(page_num)
     except EmptyPage:
         page = p.page(1)
+
+
+    for i in order_product:
+        total += i.product_price +i.order.tax
+
+    tot = int(total)
 
     context = {
         'order_products' : page,
@@ -1124,7 +1133,6 @@ def export_pdf(request):
         total += i.product_price +i.order.tax
 
     tot = int(total)
-
 
 
     html_string = render_to_string('report/pdf_output.html',{'expenses':order_product,'total':tot})
