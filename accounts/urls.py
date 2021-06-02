@@ -52,6 +52,7 @@ urlpatterns = [
     path('product_offer/',views.product_offer,name="product_offer"),
     path('category_offer/',views.category_offer,name="category_offer"),
     path('export_pdf/',views.export_pdf,name="export_pdf"),
+    path('export_excel/',views.export_excel,name="export_excel"),
     path('coupon_discount/',views.coupon_discount,name="coupon_discount"),
     path('delete_coupon/<int:pk>/',views.delete_coupon,name="delete_coupon"),
     path('delete_category_offer/<int:pk>/',views.delete_category_offer,name="delete_category_offer"),

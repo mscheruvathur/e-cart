@@ -4,6 +4,7 @@ from django import forms, shortcuts
 from django.core import paginator
 from django.db.models import query
 from django.shortcuts import get_object_or_404, render,redirect
+from django.utils import encoding
 from .forms import NewOrderProductForm, RegistrationForm,UserForm,UserProfileForm
 from .models import Account, UserProfile, Refferel
 from django.contrib import messages, auth
@@ -300,7 +301,7 @@ def edit_profile(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             
-            profile_form.save(commit=False)
+            profile_form.save()
             
             messages.success(request,'Your profile has been updates')
             return redirect('edit_profile')
@@ -355,15 +356,17 @@ def change_password(request):
 
 @login_required(login_url= 'login')
 def dashboard(request, rec_code = 0):
-    
+    user_profile = get_object_or_404(UserProfile, user= request.user)
     refferel = Refferel.objects.get(user_id=request.user.id)
     refferal_link = refferel.code
     orders = Order.objects.order_by('-created_at').filter(user_id = request.user.id, is_ordered=True)
     orders_count = orders.count()
     if RefCoupon.objects.filter(user = request.user ).exists():
         rec_code = RefCoupon.objects.get(user=request.user)
+    
 
     context = {
+        'user_profile':user_profile,
         'orders_count' : orders_count,
         'refferal_link':refferal_link,
         'rec_code' : rec_code,
@@ -1148,6 +1151,40 @@ def export_pdf(request):
         response.write(output.read())
 
     return response
+
+
+
+
+# export to excel
+import xlwt
+def export_excel(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'inline; attachment; filename=SalesReport' + str(datetime.datetime.now())+'.xls'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('SalesReport')
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    columns = ['Product','Amount','quantity','Date']
+
+    for col_num in range(len(columns)):
+        ws.write(row_num,col_num,columns[col_num],font_style)
+    
+    font_style = xlwt.XFStyle()
+
+    rows = OrderProduct.objects.filter(status = 'Delivered').values_list('product','product_price','quantity','created_at')
+
+    for row in rows:
+        row_num += 1
+
+        for col_num in range(len(row)):
+            ws.write(row_num,col_num,str(row[col_num]),font_style)
+
+    wb.save(response)
+    
+    return response
+
+
 
 
 
