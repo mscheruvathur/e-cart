@@ -1,6 +1,7 @@
 from datetime import date
 from random import random
 from django import forms, shortcuts
+from django.contrib.auth.models import User
 from django.core import paginator
 from django.db.models import query
 from django.shortcuts import get_object_or_404, render,redirect
@@ -373,7 +374,16 @@ def change_password(request):
 
 @login_required(login_url= 'login')
 def dashboard(request, rec_code = 0):
-    user_profile = get_object_or_404(UserProfile, user= request.user)
+    try:
+        # user_profile = get_object_or_404(UserProfile, user= request.user)
+        user_profile = UserProfile.objects.get(user = request.user)
+        
+    except:
+        user_profile = UserProfile(
+            user = request.user,
+            profile_picture = 'static/images/pro_pic.png'
+        )
+        user_profile.save()
     refferel = Refferel.objects.get(user_id=request.user.id)
     refferal_link = refferel.code
     orders = Order.objects.order_by('-created_at').filter(user_id = request.user.id, is_ordered=True)

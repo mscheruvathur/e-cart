@@ -1,3 +1,4 @@
+from django.http import response
 from django.shortcuts import render,redirect
 from cart.models import CartItem
 import datetime
@@ -72,7 +73,7 @@ def razorpay_payment(request):
 
 
 # paypal payment
-
+from django.http import JsonResponse
 def paypal_payment(request):
     body = json.loads(request.body)
     order = Order.objects.get(user=request.user, is_ordered=False, order_number=body['orderID'])
@@ -119,8 +120,12 @@ def paypal_payment(request):
 
     ref_code = RefCoupon.objects.filter(is_active = True)
     ref_code.delete()
+    data={
+        'order_number':order.order_number,
+        'transID':payment.payment_id
+    }
     
-    return redirect('order_complete')
+    return JsonResponse(data)
 
 
 # cash payment
