@@ -520,20 +520,21 @@ def resetPassword(request):
 # admin login
 # @cache_control(max_age=0, no_cache=True, no_store=True, must_revalidate=True)
 
-@admin_decorator
-def admin_login(request):
-    
+def admin_login(request):    
     if request.method == 'POST':
         
         uname = 'admin'
-        pword = 'admin'
+        pword = '7994115115'
         username = request.POST['username']
         password = request.POST['password']
-        if uname == username and password == pword:
+        print('before cheking username and password')
+        if uname == username and pword == password:
+            print('after checking user name and password')
             request.session['is_logged'] = True
-            return render(request,'admin_panel_templates/admin_panel.html')
+            print('session is activated')
+            return redirect('admin_panel')
         else:
-            return redirect(request,'admin_login')
+            return redirect('admin_login')
     return render(request,'admin_panel_templates/login.html')
 
 
@@ -541,6 +542,7 @@ def admin_login(request):
 
 # admin panel
 
+@admin_decorator
 def admin_panel(request):    
 
     order=OrderProduct.objects.all()
@@ -582,7 +584,6 @@ def admin_panel(request):
     for i in products:
         x = i.category.category_name
         category_items.append(x)
-    print(category_items)
     
     for i in category_items:
         if i == 'Shirts':
@@ -633,6 +634,7 @@ def admin_panel(request):
 
 import json
 from json import dumps
+@admin_decorator
 def product(request):    
     products = Product.objects.all()
     js_product_data = json.dumps(str(list(Product.objects.values())))
@@ -660,7 +662,7 @@ def update_product(request,pk):
 # add product
 import base64
 from django.core.files.base import ContentFile
-
+@admin_decorator
 def add_product(request):
     form = NewProductForm()
     if request.method == 'POST':
@@ -729,7 +731,7 @@ def delete_pro(request,pk):
 
 
 # add variations for a product
-
+@admin_decorator
 def add_variation(request):
     form = NewVariationForm(request.POST)
     if request.method =='POST':
@@ -743,7 +745,7 @@ def add_variation(request):
 
 
 # displaying variations
-
+@admin_decorator
 def variation(request):
     variation = Variation.objects.all()
     context = {'variation' : variation}
@@ -769,7 +771,7 @@ def view_category(request):
 
 
 # add category
-
+@admin_decorator
 def category(request):
     form = NewCategorytForm(request.POST)
     if request.method == 'POST':
@@ -783,7 +785,7 @@ def category(request):
 
 
 # displaying user details
-
+@admin_decorator
 def user_details(request):    
     user = Account.objects.all()
     context = {'user':user}
@@ -819,7 +821,7 @@ def delete_user(request,pk):
 
 
 # displaying orders
-
+@admin_decorator
 def order_management(request):
 
     order_product = OrderProduct.objects.all()
@@ -840,6 +842,7 @@ def order_management(request):
 # displaying delivered items. It will also show you the report form a priod to another period
 
 from django.core.paginator import EmptyPage, Paginator
+@admin_decorator
 def sales_management(request, page = 0):
 
 
@@ -963,7 +966,7 @@ def yearly_report(request):
 
 
 # product offer management
-
+@admin_decorator
 def product_offer(request):
     product_offers = ProductOffer.objects.all()
     products = Product.objects.all()
@@ -1027,7 +1030,7 @@ def delete_product_offer(request,pk):
 
 
 # category offer management
-
+@admin_decorator
 def category_offer(request):
     category_offers = CategoryOffer.objects.all()
     category_items = Category.objects.all()
@@ -1083,7 +1086,7 @@ def delete_category_offer(request,pk):
 
 
 # coupon discount
-
+@admin_decorator
 def coupon_discount(request):
 
     coupons = CouponDiscount.objects.all()
