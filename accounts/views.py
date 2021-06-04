@@ -73,19 +73,22 @@ def register(request):
                 coupon_1.save()
                 coupon_2 =  RefCoupon(user=recommended_by_profile.user,coupon_code = rec_code)
                 coupon_2.save()
+                user.is_active =True
+                user.save()
 
-                current_site = get_current_site(request)
-                mail_subject = ' Please Activate Your Account'
-                message = render_to_string('accounts/account_verification_email.html', {
-                    'user' : user,
-                    'domain' : 'c2-18-222-163-8.us-east-2.compute.amazonaws.com',
-                    'uid' : urlsafe_base64_encode(force_bytes(user.pk)),
-                    'token' : default_token_generator.make_token(user),
-                })
-                to_email = email
-                send_email = EmailMessage(mail_subject, message, to=[to_email])
-                send_email.send()
-                return redirect('/accounts/login/?command=verification&email='+email)
+                # current_site = get_current_site(request)
+                # mail_subject = ' Please Activate Your Account'
+                # message = render_to_string('accounts/account_verification_email.html', {
+                #     'user' : user,
+                #     'domain' : current_site,
+                #     'uid' : urlsafe_base64_encode(force_bytes(user.pk)),
+                #     'token' : default_token_generator.make_token(user),
+                # })
+                # to_email = email
+                # send_email = EmailMessage(mail_subject, message, to=[to_email])
+                # send_email.send()
+                
+                return redirect('login')
             else:
                 pass
                 first_name = form.cleaned_data['first_name']
@@ -96,20 +99,22 @@ def register(request):
                 username = email.split('@')[0]
                 user = Account.objects.create_user(first_name=first_name,last_name=last_name,email=email,username = username,password = password)
                 user.phone_number = phone_number
+                user.is_active =True
                 user.save()
 
-                current_site = get_current_site(request)
-                mail_subject = ' Please Activate Your Account'
-                message = render_to_string('accounts/account_verification_email.html', {
-                    'user' : user,
-                    'domain' : 'ec2-18-222-163-8.us-east-2.compute.amazonaws.com',
-                    'uid' : urlsafe_base64_encode(force_bytes(user.pk)),
-                    'token' : default_token_generator.make_token(user),
-                })
-                to_email = email
-                send_email = EmailMessage(mail_subject, message, to=[to_email])
-                send_email.send()
-                return redirect('/accounts/login/?command=verification&email='+email)
+
+                # current_site = get_current_site(request)
+                # mail_subject = ' Please Activate Your Account'
+                # message = render_to_string('accounts/account_verification_email.html', {
+                #     'user' : user,
+                #     'domain' : current_site,
+                #     'uid' : urlsafe_base64_encode(force_bytes(user.pk)),
+                #     'token' : default_token_generator.make_token(user),
+                # })
+                # to_email = email
+                # send_email = EmailMessage(mail_subject, message, to=[to_email])
+                # send_email.send()
+                return redirect('login')
     else:
         form = RegistrationForm()
     context = {'form': form}
@@ -165,6 +170,15 @@ def login(request):
             messages.success(request, 'You are Now Logged in.')
             url = request.META.get('HTTP_REFERER')
             try:
+                UserProfile.objects.filter(user = request.user).exists()
+            except:
+                user_profile = UserProfile(
+                        user = user,
+                        profile_picture = 'static/images/pro_pic.png'
+                    )
+                user_profile.save()
+            
+            try:
                 query = requests.utils.urlparse(url).query
                 print(query)
                 params = dict(x.split('=') for x in query.split('&'))
@@ -202,7 +216,7 @@ def otp_login(request):
     
     if request.method == 'POST':
         phone = request.POST['phone']
-        user = Account.object.all()
+        user = Account.objects.all()
         phone_num = []
         for i in user:
             x = i.phone_number
@@ -214,7 +228,7 @@ def otp_login(request):
             return redirect('otp_login')
 
         else:
-            user_phone = Account.object.get(phone_number=phone)
+            user_phone = Account.objects.get(phone_number=phone)
             if user_phone is not None:
                 global user_mob
                 user_mob = user_phone.phone_number
@@ -237,7 +251,7 @@ def enter_otp(request):
 
         global user_mob
         phone = user_mob
-        user_account = Account.object.get(phone_number = phone)
+        user_account = Account.objects.get(phone_number = phone)
         print(user_account)
 
         if otp == random_otp:
@@ -300,8 +314,11 @@ def edit_profile(request):
         profile_form = UserProfileForm(request.POST, request.FILES)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
-            
-            profile_form.save()
+            profile = profile_form.save(commit=False)
+            profile.user = request.user
+            user_pro = UserProfile.objects.get(user=request.user)
+            user_pro.delete()
+            profile.save()
             
             messages.success(request,'Your profile has been updates')
             return redirect('edit_profile')
@@ -371,6 +388,7 @@ def dashboard(request, rec_code = 0):
         'refferal_link':refferal_link,
         'rec_code' : rec_code,
         }
+    
     return render(request,'accounts/dashboard.html',context)
 
 
@@ -423,22 +441,22 @@ def logout(request):
 
 # user activation via email
 
-def activate(request,uidb64, token):
+# def activate(request,uidb64, token):
 
-    try:
-        uid = urlsafe_base64_decode(uidb64).decode()
-        user = Account._default_manager.get(pk=uid)
-    except(TypeError,ValueError,OverflowError,Account.DoesNotExist):
-        user = None
+#     try:
+#         uid = urlsafe_base64_decode(uidb64).decode()
+#         user = Account._default_manager.get(pk=uid)
+#     except(TypeError,ValueError,OverflowError,Account.DoesNotExist):
+#         user = None
 
-    if user is not None and default_token_generator.check_token(user,token):
-        user.is_active =True
-        user.save()
-        messages.success(request, 'Congratulations! Your account is activated.')
-        return redirect('login')
-    else:
-        messages.error(request, 'Invalid activation link')
-        return redirect('register')
+#     if user is not None and default_token_generator.check_token(user,token):
+#         user.is_active =True
+#         user.save()
+#         messages.success(request, 'Congratulations! Your account is activated.')
+#         return redirect('login')
+#     else:
+#         messages.error(request, 'Invalid activation link')
+#         return redirect('register')
 
 
 
