@@ -78,7 +78,7 @@ def register(request):
                 mail_subject = ' Please Activate Your Account'
                 message = render_to_string('accounts/account_verification_email.html', {
                     'user' : user,
-                    'domain' : current_site,
+                    'domain' : 'c2-18-222-163-8.us-east-2.compute.amazonaws.com',
                     'uid' : urlsafe_base64_encode(force_bytes(user.pk)),
                     'token' : default_token_generator.make_token(user),
                 })
@@ -102,7 +102,7 @@ def register(request):
                 mail_subject = ' Please Activate Your Account'
                 message = render_to_string('accounts/account_verification_email.html', {
                     'user' : user,
-                    'domain' : current_site,
+                    'domain' : 'ec2-18-222-163-8.us-east-2.compute.amazonaws.com',
                     'uid' : urlsafe_base64_encode(force_bytes(user.pk)),
                     'token' : default_token_generator.make_token(user),
                 })
