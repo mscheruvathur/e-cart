@@ -64,11 +64,12 @@ def product_detail(request, category_slug, product_slug,offer_price=0):
                     products.save(update_fields = ['off_price','off_percentage'])
     except Exception as e:
         raise e
-
-    try:
-        orderproduct = OrderProduct.objects.filter(user =  request.user, product_id = single_product.id).exists()
-    except OrderProduct.DoesNotExist:
-        orderproduct = None
+    orderproduct = 0
+    if request.user.is_authenticated:
+        try:
+            orderproduct = OrderProduct.objects.filter(user =  request.user, product_id = single_product.id).exists()
+        except OrderProduct.DoesNotExist:
+            orderproduct = None
 
     reviews = ReviewRating.objects.filter(product_id = single_product.id, status = True)
 
