@@ -647,17 +647,31 @@ def product(request):
 # update prduct
 
 def update_product(request,pk):
+
     products = Product.objects.get(id=pk)
+    form = NewProductForm(instance =products)
     if request.method == 'POST':
-        products.product_name = request.POST['name']
-        # products.images = request.POST.get('images')
-        products.price = request.POST['price']
-        products.size = request.POST['size']
-        products.description = request.POST['description']
-        products.slug = request.POST['slug']
-        products.save()
-        return redirect('update_product')
-    context = {'products' : products}
+        form = NewProductForm(request.POST, request.FILES, instance = products)
+
+        if form.is_valid():
+            form.save()
+            return redirect('product_details')
+    context = {
+        'products':products,
+        'form':form,
+    }
+
+    # products = Product.objects.get(id=pk)
+    # if request.method == 'POST':
+    #     products.product_name = request.POST['name']
+    #     # products.images = request.POST.get('images')
+    #     products.price = request.POST['price']
+    #     products.size = request.POST['size']
+    #     products.description = request.POST['description']
+    #     products.slug = request.POST['slug']
+    #     products.save()
+    #     return redirect('update_product')
+    # context = {'products' : products}
     return render(request,'admin_panel_templates/update_product.html',context)
     
 

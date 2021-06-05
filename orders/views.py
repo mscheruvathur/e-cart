@@ -207,7 +207,7 @@ def payments(request):
 # order palcing
 
 from orders.models import RefCoupon
-
+total2 = 0
 def place_order(request, total = 0, quantity = 0, coupon_co = 0, coupon_disc = 0, offer_price = 0):
     current_user = request.user
 
@@ -236,6 +236,7 @@ def place_order(request, total = 0, quantity = 0, coupon_co = 0, coupon_disc = 0
                     coupon_co = i.coupon_code
                 total += ((cart_item.product.price - cart_item.product.off_price) * cart_item.quantity)
                 quantity += cart_item.quantity
+                global total2
                 total2 = (total/100)*int(coupon_discount)
                 offer_price = total-total2
                 coupon_disc = total2
@@ -270,7 +271,7 @@ def place_order(request, total = 0, quantity = 0, coupon_co = 0, coupon_disc = 0
     grand_total = total + tax
     grand_total_2 = int(grand_total)*100
     g_total = grand_total
-
+    
     if coupon_code:
         grand_total = total-total2
         grand_total_2 = int(grand_total)*100
