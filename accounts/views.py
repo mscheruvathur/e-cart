@@ -346,7 +346,7 @@ def change_password(request):
         new_password = request.POST['new_password']
         confirm_password = request.POST['confirm_password']
 
-        user = Account.object.get(username__exact = request.user.username)
+        user = Account.objects.get(username__exact = request.user.username)
         
         if new_password == confirm_password:
             success = user.check_password(current_password)
@@ -528,7 +528,7 @@ def resetPassword(request):
         confirm_password = request.POST['confirm_password']
         if password == confirm_password:
             uid = request.session.get('uid')
-            user = Account.object.get(pk=uid)
+            user = Account.objects.get(pk=uid)
             user.set_password(password)
             user.save()
             messages.success(request,'Password reset successfull')
@@ -824,7 +824,7 @@ def user_details(request):
 # blocking a user
 
 def block_user(request,pk):
-    user = Account.object.get(id=pk)
+    user = Account.objects.get(id=pk)
     user.is_active = False
     user.save()
     return redirect('user_details')
@@ -833,7 +833,7 @@ def block_user(request,pk):
 # unbloack a user
 
 def unblock_user(request,pk):
-    user = Account.object.get(id=pk)
+    user = Account.objects.get(id=pk)
     user.is_active = True
     user.save()
     return redirect('user_details')
@@ -842,7 +842,7 @@ def unblock_user(request,pk):
 # delete a user
 
 def delete_user(request,pk):
-    user = Account.object.get(id=pk)
+    user = Account.objects.get(id=pk)
     user.delete()
     return redirect('user_details')
 
