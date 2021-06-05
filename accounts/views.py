@@ -474,8 +474,8 @@ def logout(request):
 # forgot password
 
 def forgotPassword(request):
-    if request.method == 'POST':
-        email = request.POST['email']
+    if request.method == 'GET':
+        email = request.GET.get('email')
         if Account.object.filter(email=email):
             user = Account.object.get(email__exact=email)
             
