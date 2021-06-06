@@ -229,6 +229,7 @@ def place_order(request, total = 0, quantity = 0, coupon_co = 0, coupon_disc = 0
         if cart_item.product.off_price is not None:
 
             if coupon_code:
+                print('coupon conde is 2 ',coupon_code)
                 coupon_discount = 0
                 coupon_co = ''
                 for i in coupon_code:
@@ -258,16 +259,18 @@ def place_order(request, total = 0, quantity = 0, coupon_co = 0, coupon_disc = 0
             else:
                 total += ((cart_item.product.price - cart_item.product.off_price) * cart_item.quantity)
                 quantity += cart_item.quantity
+            
+
 
         else:
             total += (cart_item.product.price * cart_item.quantity)
             quantity += cart_item.quantity
     if coupon_code:        
-        tax = (2 * total)/100
+        tax = (5 * total)/100
     elif ref_code:
-        tax = (2 * total)/100
+        tax = (5 * total)/100
     else:
-        tax = (2 * total)/100
+        tax = (5 * total)/100
     grand_total = total + tax
     grand_total_2 = int(grand_total)*100
     g_total = grand_total
@@ -306,7 +309,6 @@ def place_order(request, total = 0, quantity = 0, coupon_co = 0, coupon_disc = 0
             
             order = Order.objects.get(user=current_user, is_ordered = False, order_number= order_number)
 
-
         context = {
             'ref_code': ref_code,
             'g_total':g_total,
@@ -317,7 +319,7 @@ def place_order(request, total = 0, quantity = 0, coupon_co = 0, coupon_disc = 0
             'user_address' : user_address,
             'order' : order,
             'cart_items' : cart_items,
-            'total ' : total,
+            'total' : total,
             'tax' : tax,
             'grand_total' : grand_total,
             'grand_total_2' : grand_total_2,
