@@ -69,11 +69,11 @@
 	<td> 
 		<div class="price-wrap"> 
 		{% if cart_item.product.off_price is not None %}
-			<var class="price">$ {{cart_item.sub_offer}}</var> 
+			<var class="price">{{cart_item.sub_offer}}</var> 
 		{% else %}
-			<var class="price">$ {{cart_item.sub_total}}</var>
+			<var class="price">{{cart_item.sub_total}}</var>
 		{% endif %}
-			<small class="text-muted"> $ {{ cart_item.product.price }}</small> 
+			<small class="text-muted">{{ cart_item.product.price }}</small> 
 		</div> <!-- price-wrap .// -->
 	</td>
 	<td class="text-right"> 
@@ -94,15 +94,15 @@
 		<div class="card-body">
 			<dl class="dlist-align">
 			  <dt>Total price:</dt>
-			  <dd class="text-right">$ {{ total }}</dd>
+			  <dd class="text-right">{{ total }}</dd>
 			</dl>
 			<dl class="dlist-align">
 			  <dt>Tax:</dt>
-			  <dd class="text-right"> ${{tax}}</dd>
+			  <dd class="text-right">{{tax}}</dd>
 			</dl>
 			<dl class="dlist-align">
 			  <dt>Total:</dt>
-			  <dd class="text-right text-dark b"><strong>${{grand_total}}</strong></dd>
+			  <dd class="text-right text-dark b"><strong>{{grand_total}}</strong></dd>
 			</dl>
 			<hr>
 			<p class="text-center mb-3">

@@ -78,11 +78,11 @@
 	<td> 
 		<div class="price-wrap"> 
 		{% if cart_item.product.off_price is not None %}
-			<var class="price">$ {{cart_item.sub_offer}}</var> 
+			<var class="price">{{cart_item.sub_offer}}</var> 
 		{% else %}
-			<var class="price">$ {{cart_item.sub_total}}</var>
+			<var class="price">{{cart_item.sub_total}}</var>
 		{% endif %}
-			<small class="text-muted"> $ {{ cart_item.product.price }}</small> 
+			<small class="text-muted">{{ cart_item.product.price }}</small> 
 		</div> <!-- price-wrap .// -->
 	</td>
 	

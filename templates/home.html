@@ -37,11 +37,11 @@
 			<figcaption class="info-wrap">
 				<a href="{{ product.get_url }}" class="title">{{product.product_name}}</a>
 				{% if product.off_price > 0 %}
-				<div class="price mt-1"><s>Original price : ${{product.price}}</s></div> <!-- price-wrap.// -->
+				<div class="price mt-1"><s>Original price : {{product.price}}</s></div> <!-- price-wrap.// -->
 				<div class="price mt-1" style="font-size:12px; color:green;">view for more details</div> <!-- price-wrap.// -->
 				
 				{% else %}
-				<div class="price mt-1">${{product.price}}</div> <!-- price-wrap.// -->
+				<div class="price mt-1">{{product.price}}</div> <!-- price-wrap.// -->
 				{% endif %}
 			</figcaption>
 			{% if single_product.stock <= 0 %}

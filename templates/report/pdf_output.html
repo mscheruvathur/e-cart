@@ -45,8 +45,8 @@
                 {% for expense in expenses %}
                 <tr>
                     <th>#{{expense.payment}}</th>
-                    <th>${{expense.order.tax}}</th>
-                    <th>${{expense.order.order_total}}</th>
+                    <th>{{expense.order.tax}}</th>
+                    <th>{{expense.order.order_total}}</th>
                     <th>{{expense.order.created_at}}</th>
                     <th>Success</th>
                 </tr>
